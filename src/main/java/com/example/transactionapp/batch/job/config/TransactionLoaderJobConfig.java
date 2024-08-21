@@ -1,4 +1,4 @@
-package com.example.transactionapp.batch.job;
+package com.example.transactionapp.batch.job.config;
 
 import com.example.transactionapp.batch.job.listener.JobCompletionNotificationListener;
 import com.example.transactionapp.transaction.entity.Transaction;

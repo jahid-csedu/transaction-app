@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,4 +31,6 @@ public class Transaction {
     private LocalDate trxDate;
     private LocalTime trxTime;
     private String customerId;
+    @Version
+    private Long version;
 }
