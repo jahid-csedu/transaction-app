@@ -1,5 +1,6 @@
 package com.example.transactionapp.transaction.controller;
 
+import com.example.transactionapp.transaction.dto.PageResponseDto;
 import com.example.transactionapp.transaction.dto.TransactionUpdateDto;
 import com.example.transactionapp.transaction.entity.Transaction;
 import com.example.transactionapp.transaction.service.TransactionService;
@@ -25,12 +26,17 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping
-    public ResponseEntity<Page<Transaction>> getTransactions(@PageableDefault Pageable pageRequest,
-                                                                  @RequestParam(value = "customer-id", required = false) String customerId,
-                                                                  @RequestParam(value = "account-number", required = false) String accountNumber,
-                                                                  @RequestParam(value = "description", required = false) String description) {
+    public ResponseEntity<PageResponseDto<Transaction>> getTransactions(@PageableDefault Pageable pageRequest,
+                                                                        @RequestParam(value = "customer-id", required = false) String customerId,
+                                                                        @RequestParam(value = "account-number", required = false) String accountNumber,
+                                                                        @RequestParam(value = "description", required = false) String description) {
         Page<Transaction> transactions = transactionService.searchTransactions(customerId, accountNumber, description, pageRequest);
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok(new PageResponseDto<>(
+                transactions.getNumber(),
+                transactions.getTotalPages(),
+                transactions.getTotalElements(),
+                transactions.getContent()
+        ));
     }
 
     @PutMapping("/{id}")
