@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.test.MetaDataInstanceFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 
 import java.time.LocalDate;
@@ -14,17 +12,15 @@ import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-class TransactionItemReaderTest {
 
-    @Autowired
-    private TransactionItemReader transactionItemReader;
+class TransactionItemReaderTest {
 
     private FlatFileItemReader<Transaction> reader;
 
     @BeforeEach
     void setUp() {
-        reader = this.transactionItemReader.reader(new ClassPathResource("data/dataSource.txt"));
+        TransactionItemReader transactionItemReader = new TransactionItemReader();
+        reader = transactionItemReader.reader(new ClassPathResource("data/dataSource.txt"));
         reader.open(MetaDataInstanceFactory.createStepExecution().getExecutionContext());
     }
 

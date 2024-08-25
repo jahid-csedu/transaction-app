@@ -3,24 +3,29 @@ package com.example.transactionapp.batch.job.writer;
 import com.example.transactionapp.transaction.entity.Transaction;
 import com.example.transactionapp.transaction.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.batch.item.Chunk;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+
+@ExtendWith(MockitoExtension.class)
 class TransactionItemWriterTest {
 
-    @Autowired
-    private TransactionItemWriter transactionItemWriter;
-
-    @Autowired
+    @Mock
     private TransactionRepository transactionRepository;
+
+    @InjectMocks
+    private TransactionItemWriter transactionItemWriter;
 
     @Test
     void testWrite() throws Exception {
@@ -28,8 +33,10 @@ class TransactionItemWriterTest {
         transaction.setAccountNumber("123456");
         transaction.setTrxAmount(new BigDecimal("100.00"));
 
+        when(transactionRepository.saveAll(any())).thenReturn(List.of(transaction));
+
         transactionItemWriter.write(new Chunk<>(List.of(transaction)));
 
-        assertThat(transactionRepository.findAll()).isNotNull();
+        verify(transactionRepository, times(1)).saveAll(any());
     }
 }
